@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Page</title>
+
+    <style>
+
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background-color: #f5f5f5;
+            padding: 40px;
+        }
+
+        .comments-container{
+            width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h2{
+            margin-bottom: 20px;
+        }
+
+        textarea{
+            width: 100%;
+            height: 120px;
+            resize: none;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button{
+            padding: 10px 20px;
+            border: none;
+            background-color: #10b981;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .comments-list{
+            margin-top: 40px;
+        }
+
+        .comment-item{
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .comment-text{
+            margin-top: 10px;
+            color: #333;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="comments-container">
+
+        <h2>Comments Section</h2>
+
+        <div class="comment-form">
+
+            <textarea
+                placeholder="Write your comment..."
+                class="commentUser-content">
+            </textarea>
+
+            <button class="submit-btn">
+                Post Comment
+            </button>
+
+        </div>
+
+        <div class="comments-list">
+
+            {% for comment in comments %}
+
+            <div class="comment-item">
+
+                <div class="comment-text"></div>
+
+                <script>
+
+                    document.currentScript.previousElementSibling.innerHTML =
+                    `{{ comment[0] | safe }}`
+
+                </script>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+<script>
+
+const commentInput = document.querySelector('.commentUser-content')
+
+const submitBtn = document.querySelector('.submit-btn')
+
+submitBtn.addEventListener('click', async () => {
+
+    const comment = commentInput.value
+
+    const response = await fetch('/add_comment', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            comment: comment
+        })
+
+    })
+
+    const data = await response.json()
+
+    console.log(data)
+
+    location.reload()
+
+})
+
+</script>
+
+</body>
+</html>
